@@ -1,0 +1,12 @@
+{
+  "ignore": [
+    "README.md",
+    "test/.gitkeep"
+    "contracts/utillib/*.ignore"
+  ],
+  "commands": {
+    "Compile": "truffle compile",
+    "Migrate": "truffle migrate",
+    "Test contracts": "truffle test"
+  }
+}
