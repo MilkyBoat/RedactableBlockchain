@@ -8,9 +8,9 @@ contract RDChain {
     using LibChameleonHash for *;
 
     uint private maxNo;
-    mapping (uint => address) private hashList;
+    mapping (uint => uint256) private hashList;
     mapping (uint => string) private msgList;
-    mapping (uint => uint) private rList;
+    mapping (uint => uint256) private rList;
 
     function helloworld() public pure returns(string memory) {
         return "hello world!";
@@ -19,8 +19,8 @@ contract RDChain {
     function chainInit() public {
         maxNo = 0;
         msgList[0] = "redactable blockchain genesis block";
-        hashList[0] = 0x0000000000000000000000000000000000000000;
-        rList[0] = 0;
+        hashList[0] = 0x0;
+        rList[0] = 0x0;
     }
 
     function extendChain(string memory m) public pure returns (bool) {

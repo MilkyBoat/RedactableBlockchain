@@ -111,7 +111,6 @@ library Curve {
     function expMod(uint256 _base, uint256 _exponent, uint256 _modulus)
         internal pure returns (uint256 retval)
     {
-        // bool success;
         uint256[1] memory output;
         uint[6] memory input;
         input[0] = 0x20;        // baseLen = new(big.Int).SetBytes(getData(input, 0, 32))
@@ -120,12 +119,13 @@ library Curve {
         input[3] = _base;
         input[4] = _exponent;
         input[5] = _modulus;
-        // assembly {
-        //     success := staticcall(sub(gas, 2000), 5, input, 0xc0, output, 0x20)
-        //     // Use "invalid" to make gas estimation work
-        //     switch success case 0 { invalid }
-        // }
-        // require(success);
+        bool success;
+        assembly {
+            success := staticcall(sub(gas, 2000), 5, input, 0xc0, output, 0x20)
+            // Use "invalid" to make gas estimation work
+            // switch success case 0 { invalid }
+        }
+        require(success);
         return output[0];
     }
 
@@ -156,13 +156,13 @@ library Curve {
 		input[1] = p1.Y;
 		input[2] = p2.X;
 		input[3] = p2.Y;
-		// bool success;
-		// assembly {
-		// 	success := staticcall(sub(gas, 2000), 6, input, 0xc0, r, 0x60)
-		// 	// Use "invalid" to make gas estimation work
-		// 	switch success case 0 { invalid }
-		// }
-		// require(success);
+		bool success;
+		assembly {
+			success := staticcall(sub(gas, 2000), 6, input, 0xc0, r, 0x60)
+			// Use "invalid" to make gas estimation work
+			// switch success case 0 { invalid }
+		}
+		require(success);
 	}
 
 	/// @return the product of a point on G1 and a scalar, i.e.
@@ -172,13 +172,13 @@ library Curve {
 		input[0] = p.X;
 		input[1] = p.Y;
 		input[2] = s;
-		// bool success;
-		// assembly {
-		// 	success := staticcall(sub(gas, 2000), 7, input, 0x80, r, 0x60)
-		// 	// Use "invalid" to make gas estimation work
-		// 	switch success case 0 { invalid }
-		// }
-		// require (success);
+		bool success;
+		assembly {
+			success := staticcall(sub(gas, 2000), 7, input, 0x80, r, 0x60)
+			// Use "invalid" to make gas estimation work
+			// switch success case 0 { invalid }
+		}
+		require (success);
 	}
 
 	/// @return the result of computing the pairing check
@@ -200,13 +200,13 @@ library Curve {
 			input[i * 6 + 5] = p2[i].Y[1];
 		}
 		uint[1] memory out;
-		// bool success;
-		// assembly {
-		// 	success := staticcall(sub(gas, 2000), 8, add(input, 0x20), mul(inputSize, 0x20), out, 0x20)
-		// 	// Use "invalid" to make gas estimation work
-		// 	switch success case 0 { invalid }
-		// }
-		// require(success);
+		bool success;
+		assembly {
+			success := staticcall(sub(gas, 2000), 8, add(input, 0x20), mul(inputSize, 0x20), out, 0x20)
+			// Use "invalid" to make gas estimation work
+			// switch success case 0 { invalid }
+		}
+		require(success);
 		return out[0] != 0;
 	}
 
