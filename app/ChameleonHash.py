@@ -3,9 +3,15 @@ import math
 from hashUtil import *
 
 def ChameleonHash(PK,g,m,r):                       #变色龙哈希
+    if isinstance(m, str):
+        m = str2int(m)
     return quickPower(g, m, p) * quickPower(PK, r, p) % p
 
 def Forge(SK,m1,r1,m2):                            #求r'
+    if isinstance(m1, str):
+        m1 = str2int(m1)
+    if isinstance(m2, str):
+        m2 = str2int(m2)
     x, y, gcd = exgcd(SK, q)
     return x * (m1 - m2 + SK * r1) % q
 

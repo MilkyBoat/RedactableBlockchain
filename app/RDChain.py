@@ -7,7 +7,6 @@ import base64
 import struct
 from time import time
 import chainUtil as chain
-import ChameleonHash as ch
 
 
 msgs = [
@@ -23,24 +22,27 @@ def main():
 
     # offline part init
 
-    SK = ch.getSecretKey()
-    PK = ch.getPublicKey(SK)
+    chain.hashInit()
 
     # connect to blockchain and deploy contract
 
     w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:8545"))
     if w3.isConnected() is False:
-        raise Exception('error in connecting')
+        raise Exception('error in connecting to block chain')
+
+    print("connected to blockchain.\n")
 
     contract_instance = chain.DeployContract()
 
-    blockno = chain.addBlock(msgs[0])
+    print("contract deployed.\n")
 
-    blockno = chain.addBlock(msgs[1])
+    chain.addBlock(msgs[0])
+
+    chain.addBlock(msgs[1])
 
     chain.modifyBlock(1, msgs[2])
 
-    blockno = chain.addBlock(msgs[3])
+    chain.addBlock(msgs[3])
 
     chain.modifyBlock(3, msgs[4])
 

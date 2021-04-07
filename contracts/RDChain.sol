@@ -8,6 +8,8 @@ contract RDChain {
     mapping (uint => uint256) private hashList;
     mapping (uint => uint256) private rList;
 
+    event entendResult(uint blockNo);
+
     function helloworld() public pure returns(string memory) {
         return "hello world!";
     }
@@ -22,11 +24,15 @@ contract RDChain {
         return (hashList[blockNo], rList[blockNo]);
     }
 
-    function extendChain(uint256 ch, uint256 r) public returns (uint) {
+    function getMaxNo() public view returns (uint) {
+        return maxNo;
+    }
+
+    function extendChain(uint256 ch, uint256 r) public {
         maxNo++;
         hashList[maxNo] = ch;
         rList[maxNo] = r;
-        return maxNo;
+        emit entendResult(maxNo);
     }
 
     function redactBlock(uint blockNo, uint256 ch, uint256 r) public {
