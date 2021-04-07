@@ -1,0 +1,9 @@
+.vscode
+
+app/__pycache__
+
+bulid/*
+
+RDBlockchain/*
+
+test
