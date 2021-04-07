@@ -52,7 +52,7 @@ library Curve {
 	}
 
 	function HashToPoint(uint256 s)
-        internal pure returns (G1Point memory)
+        internal view returns (G1Point memory)
     {
         uint256 beta = 0;
         uint256 y = 0;
@@ -81,7 +81,7 @@ library Curve {
     * Returns: (x^3 + b), y
     */
     function FindYforX(uint256 x)
-        internal pure returns (uint256, uint256)
+        internal view returns (uint256, uint256)
     {
         // beta = (x^3 + b) % p
         uint256 beta = addmod(mulmod(mulmod(x, x, FIELD_ORDER), x, FIELD_ORDER), CURVE_B, FIELD_ORDER);
@@ -109,7 +109,7 @@ library Curve {
 
 
     function expMod(uint256 _base, uint256 _exponent, uint256 _modulus)
-        internal pure returns (uint256 retval)
+        internal view returns (uint256 retval)
     {
         uint256[1] memory output;
         uint[6] memory input;
@@ -150,7 +150,7 @@ library Curve {
 	}
 
 	/// @return the sum of two points of G1
-	function g1add(G1Point memory p1, G1Point memory p2) pure internal returns (G1Point memory r) {
+	function g1add(G1Point memory p1, G1Point memory p2) view internal returns (G1Point memory r) {
 		uint[4] memory input;
 		input[0] = p1.X;
 		input[1] = p1.Y;
@@ -167,7 +167,7 @@ library Curve {
 
 	/// @return the product of a point on G1 and a scalar, i.e.
 	/// p == p.mul(1) and p.add(p) == p.mul(2) for all points p.
-	function g1mul(G1Point memory p, uint s) pure internal returns (G1Point memory r) {
+	function g1mul(G1Point memory p, uint s) view internal returns (G1Point memory r) {
 		uint[3] memory input;
 		input[0] = p.X;
 		input[1] = p.Y;
@@ -185,7 +185,7 @@ library Curve {
 	/// e(p1[0], p2[0]) *  .... * e(p1[n], p2[n]) == 1
 	/// For example pairing([P1(), P1().negate()], [P2(), P2()]) should
 	/// return true.
-	function pairing(G1Point[] memory p1, G2Point[] memory p2) pure internal returns (bool) {
+	function pairing(G1Point[] memory p1, G2Point[] memory p2) view internal returns (bool) {
 		require(p1.length == p2.length);
 		uint elements = p1.length;
 		uint inputSize = elements * 6;
@@ -211,7 +211,7 @@ library Curve {
 	}
 
 	/// Convenience method for a pairing check for two pairs.
-	function pairingProd2(G1Point memory a1, G2Point memory a2, G1Point memory b1, G2Point memory b2) pure internal returns (bool) {
+	function pairingProd2(G1Point memory a1, G2Point memory a2, G1Point memory b1, G2Point memory b2) view internal returns (bool) {
 		G1Point[] memory p1 = new G1Point[](2);
 		G2Point[] memory p2 = new G2Point[](2);
 		p1[0] = a1;
@@ -226,7 +226,7 @@ library Curve {
 			G1Point memory a1, G2Point memory a2,
 			G1Point memory b1, G2Point memory b2,
 			G1Point memory c1, G2Point memory c2
-	) pure internal returns (bool) {
+	) view internal returns (bool) {
 		G1Point[] memory p1 = new G1Point[](3);
 		G2Point[] memory p2 = new G2Point[](3);
 		p1[0] = a1;
@@ -244,7 +244,7 @@ library Curve {
 			G1Point memory b1, G2Point memory b2,
 			G1Point memory c1, G2Point memory c2,
 			G1Point memory d1, G2Point memory d2
-	) pure internal returns (bool) {
+	) view internal returns (bool) {
 		G1Point[] memory p1 = new G1Point[](4);
 		G2Point[] memory p2 = new G2Point[](4);
 		p1[0] = a1;

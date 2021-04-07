@@ -1,6 +1,7 @@
 from web3 import Web3, Account
 import json
 
+chainData = {}
 
 def DeployContract(contract_path='../build/contracts/RDChain.json'):
 
@@ -26,6 +27,23 @@ def DeployContract(contract_path='../build/contracts/RDChain.json'):
         return contract_instance
     
     # raise Exception("complied contract not found at " + contract_path)
+
+
+def addBlock(msg: str) -> int:
+
+    w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:8545"))
+    if w3.isConnected() is False:
+        raise Exception('error in connecting')
+
+    contract_instance.functions.helloworld().transact({'from': w3.eth.accounts[0]})
+    return 0
+
+
+def modifyBlock(blockNo: int, newMsg: str):
+    
+    w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:8545"))
+    if w3.isConnected() is False:
+        raise Exception('error in connecting')
 
 
 def test(contract_instance):

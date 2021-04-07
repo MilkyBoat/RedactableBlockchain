@@ -1,47 +1,45 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.5.16;
 
-import "./LibChameleonHash.sol";
+pragma solidity >=0.5.16;
 
 contract RDChain {
 
-    using LibChameleonHash for *;
-
     uint private maxNo;
     mapping (uint => uint256) private hashList;
-    mapping (uint => string) private msgList;
     mapping (uint => uint256) private rList;
 
     function helloworld() public pure returns(string memory) {
         return "hello world!";
     }
 
-    function chainInit() public {
+    constructor() public {
         maxNo = 0;
-        msgList[0] = "redactable blockchain genesis block";
         hashList[0] = 0x0;
         rList[0] = 0x0;
     }
 
-    function extendChain(string memory m) public pure returns (bool) {
-        
-        return true;
+    function getBlock(uint blockNo) public view returns (uint ch, uint r) {
+        return (hashList[blockNo], rList[blockNo]);
     }
 
-    function redactBlock(uint blockNo, string memory m) public pure returns (bool) {
-        return true;
+    function extendChain(uint256 ch, uint256 r) public returns (uint) {
+        maxNo++;
+        hashList[maxNo] = ch;
+        rList[maxNo] = r;
+        return maxNo;
     }
 
-    function delBlock(uint blockNo) public pure returns (bool) {
-        return redactBlock(blockNo, "");
+    function redactBlock(uint blockNo, uint256 ch, uint256 r) public {
+        hashList[blockNo] = ch;
+        rList[blockNo] = r;
     }
 
-    function getBlock(uint blockNo) public view returns (string memory) {
-        return msgList[blockNo];
-    }
+    // function delBlock(uint blockNo) public returns (bool) {
+    //     return redactBlock(blockNo, 0x0, 0x0);
+    // }
 
-//   function insertBlock(uint blockNo, string memory m) public returns (bool) {
-//     return true;
-//   }
+    // function insertBlock(uint blockNo, string memory m) public returns (bool) {
+    // return true;
+    // }
 
 }
