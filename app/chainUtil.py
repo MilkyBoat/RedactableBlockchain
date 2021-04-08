@@ -35,7 +35,7 @@ def DeployContract(contract_path='../build/contracts/RDChain.json'):
         tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
         contractAddress = tx_receipt.contractAddress
         contract_instance = w3.eth.contract(address=contractAddress, abi=contract_json['abi'])
-        
+
         return contract_instance
 
 
@@ -51,11 +51,11 @@ def addSimpleBlock(msg: str):
 
     w3.eth.sendTransaction({"from": w3.eth.accounts[0], "to": w3.eth.accounts[1], "data": msg})
 
-    print("%.6f-%d" % ((time()-t0), w3.eth.get_block('latest').gasUsed), end=' ')
-    # print("transact recorded to chain")
-    # print("  msg length :", len(msg))
-    # print("++time used :", time()-t0, "s")
-    # print()
+    # print("%.6f-%d" % ((time()-t0), w3.eth.get_block('latest').gasUsed), end=' ')
+    print("transact recorded to chain")
+    print("  msg length :", len(msg))
+    print("++time used :", time()-t0, "s")
+    print()
 
 
 def addBlock(msg: str) -> int:
@@ -78,14 +78,14 @@ def addBlock(msg: str) -> int:
 
     chainData[blockNo] = msg
 
-    print("%.6f-%d" % ((time()-t0), w3.eth.get_block('latest').gasUsed), end=' ')
-    # print("transact recorded to chain")
-    # print("  msg length :", len(msg))
-    # print("  block no :", blockNo)
-    # print("  chameleon hash :", chash)
-    # print("  random number :", r)
-    # print("++time used :", time()-t0, "s")
-    # print()
+    # print("%.6f-%d" % ((time()-t0), w3.eth.get_block('latest').gasUsed), end=' ')
+    print("transact recorded to chain")
+    print("  msg length :", len(msg))
+    print("  block no :", blockNo)
+    print("  chameleon hash :", chash)
+    print("  random number :", r)
+    print("++time used :", time()-t0, "s")
+    print()
 
     return blockNo
 
@@ -110,14 +110,14 @@ def modifyBlock(blockNo: int, newMsg: str):
 
     chainData[blockNo] = newMsg
 
-    print("%.6f-%d" % ((time()-t0), w3.eth.get_block('latest').gasUsed), end=' ')
-    # print("transact modified")
-    # print("  new msg length :", len(newMsg))
-    # print("  block no :", blockNo)
-    # print("  new chameleon hash :", newChash)
-    # print("  new random number :", r_)
-    # print("++time used :", time()-t0, "s")
-    # print()
+    # print("%.6f-%d" % ((time()-t0), w3.eth.get_block('latest').gasUsed), end=' ')
+    print("transact modified")
+    print("  new msg length :", len(newMsg))
+    print("  block no :", blockNo)
+    print("  new chameleon hash :", newChash)
+    print("  new random number :", r_)
+    print("++time used :", time()-t0, "s")
+    print()
 
 
 def test(contract_instance):
