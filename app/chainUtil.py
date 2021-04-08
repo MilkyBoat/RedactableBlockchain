@@ -1,7 +1,9 @@
 from web3 import Web3, Account
 import json
-import ChameleonHash as ch
+import binascii
 import random
+from time import time
+import ChameleonHash as ch
 
 chainData = {}
 contract_instance = None
@@ -43,6 +45,24 @@ def DeployContract(contract_path='../build/contracts/RDChain.json'):
         return contract_instance
 
 
+def addSimpleBlock(msg: str):
+    
+    w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:8545"))
+    if w3.isConnected() is False:
+        raise Exception('error in connecting')
+    
+    t0 = time()
+
+    msg = binascii.hexlify(bytes(msg, encoding="utf8"))
+
+    w3.eth.sendTransaction({"from": w3.eth.accounts[0], "to": w3.eth.accounts[1], "data": msg})
+
+    print("transact recorded to chain")
+    print("  msg length :", len(msg))
+    print("++time used :", time()-t0, "s")
+    print()
+
+
 def addBlock(msg: str) -> int:
 
     global chainData
@@ -50,6 +70,8 @@ def addBlock(msg: str) -> int:
     w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:8545"))
     if w3.isConnected() is False:
         raise Exception('error in connecting')
+
+    t0 = time()
 
     r = random.randint(1, ch.q)
     chash = ch.ChameleonHash(PK, ch.g, msg, r)
@@ -62,10 +84,11 @@ def addBlock(msg: str) -> int:
     chainData[blockNo] = msg
 
     print("transact recorded to chain")
-    print("  msg :", msg)
+    # print("  msg length :", len(msg))
     print("  block no :", blockNo)
-    print("  chameleon hash :", chash)
-    print("  random number :", r)
+    # print("  chameleon hash :", chash)
+    # print("  random number :", r)
+    print("++time used :", time()-t0, "s")
     print()
 
     return blockNo
@@ -79,21 +102,24 @@ def modifyBlock(blockNo: int, newMsg: str):
     if w3.isConnected() is False:
         raise Exception('error in connecting')
 
-    chash, r = contract_instance.functions.getBlock(blockNo).call()
-        
+    _, r = contract_instance.functions.getBlock(blockNo).call()
+     
+    t0 = time()
+       
     r_ = ch.Forge(SK, chainData[blockNo], r, newMsg)
     newChash = ch.ChameleonHash(PK, ch.g, newMsg, r_)
 
     tx_hash = contract_instance.functions.redactBlock(blockNo, newChash, r_).transact({'from': w3.eth.accounts[0]})
-    tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+    w3.eth.waitForTransactionReceipt(tx_hash)
 
     chainData[blockNo] = newMsg
 
     print("transact modified")
-    print("  new msg :", newMsg)
+    # print("  new msg length :", len(newMsg))
     print("  block no :", blockNo)
-    print("  new chameleon hash :", newChash)
-    print("  new random number :", r_)
+    # print("  new chameleon hash :", newChash)
+    # print("  new random number :", r_)
+    print("++time used :", time()-t0, "s")
     print()
 
 

@@ -1,21 +1,9 @@
 from web3 import Web3, Account
 # from solc import compile_files
-import json
+import random
 import os
-import pickle
-import base64
-import struct
 from time import time
 import chainUtil as chain
-
-
-msgs = [
-    "{from: 0x0001, to:0x0002, amount:1000, extraData:first transact}",
-    "{from: 0x0003, to:0x0004, amount:2000, extraData:second transact}",
-    "{from: 0x0001, to:0x0002, amount:3000, extraData:modify first transact}",
-    "{from: 0x0005, to:0x0006, amount:4000, extraData:third transact}",
-    "{from: 0x0005, to:0x0007, amount:4000, extraData:modify third transact}",
-]
 
 
 def main():
@@ -23,6 +11,9 @@ def main():
     # offline part init
 
     chain.hashInit()
+    msg_16kb = open("../data/msg.json").read()
+    testNumList = [359, 944, 1258, 1501]
+    repeat = 5
 
     # connect to blockchain and deploy contract
 
@@ -36,16 +27,31 @@ def main():
 
     print("contract deployed.\n")
 
-    chain.addBlock(msgs[0])
+    # test 1:
+    # send 16kb redackable transact to chain and just send a 16kb msg simple trasact
 
-    chain.addBlock(msgs[1])
+    for _ in range(repeat):
+        chain.addBlock(msg_16kb + str(random.randint(0,9999)).zfill(4))
+    for _ in range(repeat):
+        chain.addSimpleBlock(msg_16kb + str(random.randint(0,9999)).zfill(4))
 
-    chain.modifyBlock(1, msgs[2])
+    # test 2:
+    # redackable transact test
 
-    chain.addBlock(msgs[3])
+    for rep in testNumList:
+        for _ in range(repeat):
+            blockNo = chain.addBlock((msg_16kb + str(random.randint(0,9999)).zfill(4)) * rep)
+            chain.modifyBlock(blockNo, (msg_16kb + str(random.randint(0,9999)).zfill(4)) * (rep - 1) \
+                            + (msg_16kb + str(random.randint(0,9999)).zfill(4)))
 
-    chain.modifyBlock(3, msgs[4])
+    # test 3:
+    # appending mode to implement editable blockchain
 
+    for rep in testNumList:
+        # for _ in range(repeat):
+        chain.addSimpleBlock((msg_16kb + str(random.randint(0,9999)).zfill(4)) * rep)
+        chain.addSimpleBlock("{modfied_block: true, target_block: 1, start_pos: 0, end_pos: 16384}, " \
+                                + msg_16kb + str(random.randint(0,9999)).zfill(4))
 
 if __name__ == "__main__":
     main()

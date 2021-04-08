@@ -54,7 +54,7 @@ cd RedactableBlockchain
 ### 1. Start up a blockchain
 
 ```bash
-ganache-cli -l 9007199254740991 --db ./RDBlockchain -s 1234
+ganache-cli -g 1 -l 9007199254740991 --db ./RDBlockchain -s 1234 -a 2
 ```
 
 ### 2. Compile contracts
@@ -68,6 +68,7 @@ truffle compile
 
 ```bash
 cd app
+# make sure ganache-cli has showen "Listening on 127.0.0.1:8545"
 python3 RDChain.py
 ```
 

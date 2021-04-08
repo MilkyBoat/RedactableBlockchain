@@ -1,5 +1,4 @@
 import random
-import math
 from hashUtil import *
 
 def ChameleonHash(PK,g,m,r):                       #变色龙哈希
