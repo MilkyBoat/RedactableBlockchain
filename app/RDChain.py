@@ -12,8 +12,10 @@ def main():
 
     chain.hashInit()
     msg_16kb = open("../data/msg.json").read()
-    testNumList = [359, 944, 1258, 1501]
-    repeat = 5
+    # testNumList = [10, 50, 100, 150]
+    testNumList = [10]
+    # repeat = 5
+    repeat = 1
 
     # connect to blockchain and deploy contract
 
@@ -30,28 +32,37 @@ def main():
     # test 1:
     # send 16kb redackable transact to chain and just send a 16kb msg simple trasact
 
+    print("test 1:")
     for _ in range(repeat):
         chain.addBlock(msg_16kb + str(random.randint(0,9999)).zfill(4))
+    print()
     for _ in range(repeat):
         chain.addSimpleBlock(msg_16kb + str(random.randint(0,9999)).zfill(4))
+    print()
 
     # test 2:
     # redackable transact test
 
+    print("test 2:")
     for rep in testNumList:
+        print("dataBlockNum:", rep)
         for _ in range(repeat):
             blockNo = chain.addBlock((msg_16kb + str(random.randint(0,9999)).zfill(4)) * rep)
             chain.modifyBlock(blockNo, (msg_16kb + str(random.randint(0,9999)).zfill(4)) * (rep - 1) \
                             + (msg_16kb + str(random.randint(0,9999)).zfill(4)))
+            print()
 
     # test 3:
     # appending mode to implement editable blockchain
 
+    print("test 3:")
     for rep in testNumList:
-        # for _ in range(repeat):
-        chain.addSimpleBlock((msg_16kb + str(random.randint(0,9999)).zfill(4)) * rep)
-        chain.addSimpleBlock("{modfied_block: true, target_block: 1, start_pos: 0, end_pos: 16384}, " \
-                                + msg_16kb + str(random.randint(0,9999)).zfill(4))
+        print("dataBlockNum:", rep)
+        for _ in range(repeat):
+            chain.addSimpleBlock((msg_16kb + str(random.randint(0,9999)).zfill(4)) * rep)
+            chain.addSimpleBlock("{modfied_block: true, target_block: 1, start_pos: 0, end_pos: 16384}, " \
+                                    + msg_16kb + str(random.randint(0,9999)).zfill(4))
+            print()
 
 if __name__ == "__main__":
     main()
