@@ -53,7 +53,7 @@ def addSimpleBlock(msg: str):
 
     # print("%.6f-%d" % ((time()-t0), w3.eth.get_block('latest').gasUsed), end=' ')
     print("transact recorded to chain")
-    print("  msg length :", len(msg))
+    print("  msg length :", len(msg) / 2)
     print("++time used :", time()-t0, "s")
     print()
 
@@ -80,7 +80,7 @@ def addBlock(msg: str) -> int:
 
     # print("%.6f-%d" % ((time()-t0), w3.eth.get_block('latest').gasUsed), end=' ')
     print("transact recorded to chain")
-    print("  msg length :", len(msg))
+    print("  msg length :", len(msg) / 2)
     print("  block no :", blockNo)
     print("  chameleon hash :", chash)
     print("  random number :", r)

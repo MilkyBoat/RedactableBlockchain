@@ -2,7 +2,7 @@ from web3 import Web3, Account
 # from solc import compile_files
 import random
 import os
-from time import time
+from time import time, sleep
 import chainUtil as chain
 
 
@@ -11,11 +11,11 @@ def main():
     # offline part init
 
     chain.hashInit()
-    msg_16kb = open("../data/msg.json").read()
-    # testNumList = [10, 50, 100, 150]
-    testNumList = [10]
-    # repeat = 5
-    repeat = 1
+    msg_8kb = open("../data/msg.json").read()
+    testNumList = [100, 200, 300]
+    # testNumList = [100]
+    repeat = 5
+    # repeat = 1
 
     # connect to blockchain and deploy contract
 
@@ -34,10 +34,10 @@ def main():
 
     print("test 1:")
     for _ in range(repeat):
-        chain.addBlock(msg_16kb + str(random.randint(0,9999)).zfill(4))
+        chain.addBlock(msg_8kb + str(random.randint(0,9999)).zfill(4))
     print()
     for _ in range(repeat):
-        chain.addSimpleBlock(msg_16kb + str(random.randint(0,9999)).zfill(4))
+        chain.addSimpleBlock(msg_8kb + str(random.randint(0,9999)).zfill(4))
     print()
 
     # test 2:
@@ -47,9 +47,9 @@ def main():
     for rep in testNumList:
         print("dataBlockNum:", rep)
         for _ in range(repeat):
-            blockNo = chain.addBlock((msg_16kb + str(random.randint(0,9999)).zfill(4)) * rep)
-            chain.modifyBlock(blockNo, (msg_16kb + str(random.randint(0,9999)).zfill(4)) * (rep - 1) \
-                            + (msg_16kb + str(random.randint(0,9999)).zfill(4)))
+            blockNo = chain.addBlock((msg_8kb + str(random.randint(0,9999)).zfill(4)) * rep)
+            chain.modifyBlock(blockNo, (msg_8kb + str(random.randint(0,9999)).zfill(4)) * (rep - 1) \
+                            + (msg_8kb + str(random.randint(0,9999)).zfill(4)))
             print()
 
     # test 3:
@@ -59,10 +59,11 @@ def main():
     for rep in testNumList:
         print("dataBlockNum:", rep)
         for _ in range(repeat):
-            chain.addSimpleBlock((msg_16kb + str(random.randint(0,9999)).zfill(4)) * rep)
+            chain.addSimpleBlock((msg_8kb + str(random.randint(0,9999)).zfill(4)) * rep)
             chain.addSimpleBlock("{modfied_block: true, target_block: 1, start_pos: 0, end_pos: 16384}, " \
-                                    + msg_16kb + str(random.randint(0,9999)).zfill(4))
+                                    + msg_8kb + str(random.randint(0,9999)).zfill(4))
             print()
+            sleep(1)
 
 if __name__ == "__main__":
     main()
